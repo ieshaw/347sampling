@@ -61,8 +61,6 @@ if (not (T in T_range)) or (not (mu in mu_range)):
 
     
 # Related coefficients
-mu = 0.01
-T = 1
 theta = np.ceil(mu*n) / T
 CI_coef = norm.ppf(0.5 + CI_perc/200.0)
 
@@ -99,7 +97,6 @@ t_start = time.time()
 for i_MC in range(n_MC):
 
     # Print progress
-#    print i_MC
     if (i_MC+1) % (n_MC/100) == 0:
         print "{0: >3}% done in {1}".format(
                 int(100*(i_MC+1)/n_MC), timedelta(seconds = time.time()-t_start))
