@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="My AWS" createEmptyFolders="true">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="My AWS" createEmptyFolders="true" showExcludedInSync="true">
     <serverData>
+      <paths name="Compute AWS">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/347sampling" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="My AWS">
         <serverdata>
           <mappings>

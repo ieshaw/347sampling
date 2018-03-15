@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6569db22-2f9a-4f0c-8410-d6c42839d1e8" name="Compute AWS" url="http://ec2-18-232-182-2.compute-1.amazonaws.com">
+        <fileTransfer host="ec2-18-232-182-2.compute-1.amazonaws.com" port="22" privateKey="$USER_HOME$/.ssh/nva.pem" rootFolder="/home/ec2-user" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
