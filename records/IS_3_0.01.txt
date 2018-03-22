@@ -1,0 +1,9 @@
+n_MC = 10000
+n = 1000
+T = 3
+mu = 0.01
+mu*n = 10
+IS Estimate = 2.089681e-18
+IS Variance = 1.138453e-32
+95% CI = 2.091248e-18
+Time spent = 0:05:20.799000
