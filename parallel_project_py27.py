@@ -29,43 +29,44 @@ def p_nocorr(t, kappa, X0, c, gamma):
             (gamma - kappa + (gamma + kappa) * exp_gamma_t)
     return p_wob
 
+    
 '''
 Parameters
 '''
 
+
+# Input
+n_MC = 10000
+n = 100
+n_t = 100
+# T_range = np.array([1, 3, 5])
+# mu_range = 0.01 * np.arange(1, 21)
+beta_scale_factor = 10
+CI_perc = 95
+
+# Model parameters
+kappa = rd.uniform(0.5, 1.5, n)
+X0 = c = rd.uniform(0.001, 0.051, n)
+sigma_bar = rd.uniform(0, 0.2, n)
+sigma = np.minimum(np.sqrt(2 * kappa * c), sigma_bar)
+gamma = np.sqrt(np.square(kappa) + 2 * np.square(sigma))
+beta = rd.uniform(0, 0.01, (n, n)) / beta_scale_factor
+np.fill_diagonal(beta, 0)
+CI_coef = norm.ppf(0.5 + CI_perc / 200.0)
+
+
+'''
+Usage
+'''
+
+
 def run_exp(T,mu):
 
-    # Input
-    n_MC = 10000
-    n = 1000
-    n_t = 100
-    T_range = np.array([1, 3, 5])
-    mu_range = 0.01 * np.arange(1, 21)
-    beta_scale_factor = 10
-    CI_perc = 95
-
-    # Model parameters
-    kappa = rd.uniform(0.5, 1.5, n)
-    X0 = c = rd.uniform(0.001, 0.051, n)
-    sigma_bar = rd.uniform(0, 0.2, n)
-    sigma = np.minimum(np.sqrt(2 * kappa * c), sigma_bar)
-    gamma = np.sqrt(np.square(kappa) + 2 * np.square(sigma))
-    beta = rd.uniform(0, 0.01, (n, n)) / beta_scale_factor
-    np.fill_diagonal(beta, 0)
-
-    '''
-    Usage
-    '''
-
-
-
     t_start = time.time()
-
     print('Now on: mu = {}, T= {}'.format(mu, T))
 
     # Related coefficients
     theta = np.ceil(mu * n) / T
-    CI_coef = norm.ppf(0.5 + CI_perc / 200.0)
 
 
     '''
@@ -75,7 +76,6 @@ def run_exp(T,mu):
     # Store variables
     Y_total = np.zeros(n_MC)
     m_MC = rd.poisson(np.ceil(mu * n), n_MC)
-    #t_start = time.time()
 
 
     # Do Monte Carlo IS
@@ -135,28 +135,29 @@ def run_exp(T,mu):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    filename = output_dir + "/{}_{}.csv".format(mu, T)
-    with open(filename, 'w') as f:
-        #n_MC,n,T,,mu,mu_n,IS_Estimate,IS_Variance,95_CI,Time_spent
-        f.write('n_MC,n,T,mu,mu_n,IS_Estimate,IS_Variance,CI')
-        f.write('\n{:.0f},{:.0f},{:.0f},{:.2f},{:.0f},{:e},{:e},{:e}'.format(
-            n_MC,n,T,mu, mu*n, np.mean(Y_total),np.var(Y_total),CI_coef * np.sqrt(np.var(Y_total) / n_MC)))
-
     t_end = time.time()
     t_used = t_end - t_start
     print("Time spent = {0}".format(timedelta(seconds = t_used)))
+    
+    filename = output_dir + "/{}_{}.csv".format(mu, T)
+    with open(filename, 'w') as f:
+        f.write('T, mu, mu_n, IS_Estimate, IS_Variance, CI, Time')
+        f.write('\n{:.1f}, {:.2f}, {:.0f}, {:e}, {:e}, {:e}, {}'.format(
+            T, mu, mu*n, np.mean(Y_total), np.var(Y_total),
+            CI_coef * np.sqrt(np.var(Y_total) / n_MC),
+            timedelta(seconds = t_used)))
+
 
 # T_list = np.array([0.5, 1.5, 2, 2.5, 3.5, 4, 4.5])
-T_list = np.array([0.5, 1.5, 2.5, 3.5, 4.5])
+# T_list = np.array([0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0])
+# mu_list = (np.arange(2) + 1) * 10e-3
 
-mu_list = (np.arange(2) + 1) * 10e-3
+T_list = np.array([0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0])
+mu_list = 0.01 * np.arange(1, 21)
 
 nprocs = multiprocessing.cpu_count()
-
 grid = itertools.product(T_list, mu_list)
-
 args = [iter(grid)] * nprocs
-
 grid_zip = itertools.izip_longest(*args, fillvalue = None)
 
 for test in grid_zip:
