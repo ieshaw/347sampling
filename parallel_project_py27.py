@@ -141,8 +141,8 @@ def run_exp(T,mu):
     
     filename = output_dir + "/{}_{}.csv".format(mu, T)
     with open(filename, 'w') as f:
-        f.write('T, mu, mu_n, IS_Estimate, IS_Variance, CI, Time')
-        f.write('\n{:.1f}, {:.2f}, {:.0f}, {:e}, {:e}, {:e}, {}'.format(
+        f.write('T, mu, mu_n, IS_Estimate, IS_Variance, CI, Time\n')
+        f.write('{:.1f}, {:.2f}, {:.0f}, {:e}, {:e}, {:e}, {}\n'.format(
             T, mu, mu*n, np.mean(Y_total), np.var(Y_total),
             CI_coef * np.sqrt(np.var(Y_total) / n_MC),
             timedelta(seconds = t_used)))
