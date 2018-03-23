@@ -69,7 +69,7 @@ def run_exp(T,mu):
     Importance sampling
     '''
 
-    n_AR = 15800
+    n_AR = 500000
     N_arr_AR = np.zeros(n_AR)
 
     default_counts = np.zeros(n)
